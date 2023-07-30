@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure--w297pf9z!be1kh3&+-$wdsqss##3_i2twg29^ebbt=f3*49*@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['nlppp.fly.dev']
+ALLOWED_HOSTS = ['nlppp.fly.dev', 'localhost', '127.0.0.1']
 
 
 # Application definition
