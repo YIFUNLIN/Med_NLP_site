@@ -56,7 +56,8 @@
 </head>
 <body>
     <h1>歡迎使用 MedNLP - 醫療詞彙識別工具</h1>
-    <form method="get">
+    <form method="POST">
+        {% csrf_token %}
         <input type="text" name="input_text" placeholder="請在此輸入醫療相關的文字">
         <input type="submit" value="識別詞彙">
     </form>
