@@ -1,14 +1,27 @@
-# Dockerfile
-FROM python:3.8
+ARG PYTHON_VERSION=3.8-slim-bullseye
+
+FROM python:${PYTHON_VERSION}
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# install psycopg2 dependencies.
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /code
+
 WORKDIR /code
 
-COPY requirements.txt /code/
-RUN pip install -r requirements.txt
+COPY requirements.txt /tmp/requirements.txt
+RUN set -ex && \
+    pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt && \
+    rm -rf /root/.cache/
+COPY . /code
 
-COPY . /code/
+EXPOSE 8000
 
-CMD ["gunicorn", "bigproject.wsgi:application", "--bind", "0.0.0.0:8080"]
+CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "bigproject.wsgi"]
