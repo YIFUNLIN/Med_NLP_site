@@ -20,6 +20,9 @@ RUN set -ex && \
     pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt && \
     rm -rf /root/.cache/
+
+COPY bert_token /bert_token
+
 COPY . /code
 
 EXPOSE 8000
