@@ -20,10 +20,6 @@ RUN set -ex && \
     pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt && \
     rm -rf /root/.cache/
-
-# We do not need to copy 'bert_token' folder now, as we will download the model from Google Drive in the code
-# COPY bert_token /bert_token
-
 COPY . /code
 
 EXPOSE 8000

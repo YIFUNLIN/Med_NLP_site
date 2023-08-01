@@ -41,13 +41,14 @@ gdown.download(
 with zipfile.ZipFile("model.zip", 'r') as zip_ref:
     zip_ref.extractall("model_directory")  # 替换为你想要的目标目录
 
+# 将模型和 tokenizer 加载为全局变量
+global tokenizer
+global model
+tokenizer = AutoTokenizer.from_pretrained('hfl/chinese-roberta-wwm-ext')
+model = AutoModelForTokenClassification.from_pretrained("model_directory")
+
 
 def home(request):
-    # id2label 字典映射
-
-    tokenizer = AutoTokenizer.from_pretrained('hfl/chinese-roberta-wwm-ext')
-    model = AutoModelForTokenClassification.from_pretrained("model_directory")
-
     user_input = request.POST.get('input_text', '')  # 获取用户的输入
 
     # 使用模型进行推理
