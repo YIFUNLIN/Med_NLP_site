@@ -4,22 +4,8 @@ from transformers import AutoTokenizer, AutoModelForTokenClassification, Trainer
 from datasets import Dataset
 import numpy as np
 import pandas as pd
-
-"""
-def home(request):
-    user_input = request.GET.get('input_text', '')  # 獲取用戶的輸入
-    return render(request, 'index.html', {'output_text': user_input})  # 將用戶的輸入傳遞到模板中
-"""
-
-"""
-def home(request):
-    if request.method == 'POST':
-        user_input = request.POST.get('input_text', '')  # 獲取用戶的輸入
-        # 將用戶的輸入傳遞到模板中
-        return render(request, 'index.html', {'output_text': user_input})
-    else:
-        return render(request, 'index.html')
-"""
+import gdown
+import zipfile
 
 id2label_dict = {
     0: "O",
@@ -45,40 +31,22 @@ id2label_dict = {
     20: "I-TIME"
 }
 
-"""
-def home(request):
-    if request.method == 'POST':
-        tokenizer = AutoTokenizer.from_pretrained(
-            'hfl/chinese-roberta-wwm-ext')
-        model = AutoModelForTokenClassification.from_pretrained("bert_token")
-        trainer = Trainer(model, tokenizer=tokenizer)
+# 下载模型
+file_id = "1WgqTMCLqzlPApmiS_E87a0k2hESY245q"
+output = "model.zip"
+gdown.download(
+    f"https://drive.google.com/uc?id={file_id}", output, quiet=False)
 
-        user_input = request.POST.get('input_text', '')  # 獲取用戶的輸入
-
-        # 使用模型進行推理
-        inputs = tokenizer(user_input, return_tensors="pt")
-        outputs = model(**inputs)
-
-        # 將模型的輸出轉換為要在模板中顯示的格式
-        predictions = np.argmax(outputs.logits.detach().numpy(), axis=2)[
-            0]  # 獲取最有可能的類別
-        tokens = tokenizer.tokenize(user_input)
-        output_text = ' '.join(
-            [f'{token} ({label_dict[prediction]})' for token, prediction in zip(tokens, predictions)])
-
-        # 將用戶的輸入傳遞到模板中
-        return render(request, 'index.html', {'output_text': output_text})
-    else:
-        return render(request, 'index.html')
-
-"""
+# 解压模型
+with zipfile.ZipFile("model.zip", 'r') as zip_ref:
+    zip_ref.extractall("model_directory")  # 替换为你想要的目标目录
 
 
 def home(request):
     # id2label 字典映射
 
     tokenizer = AutoTokenizer.from_pretrained('hfl/chinese-roberta-wwm-ext')
-    model = AutoModelForTokenClassification.from_pretrained("/bert_token")
+    model = AutoModelForTokenClassification.from_pretrained("model_directory")
 
     user_input = request.POST.get('input_text', '')  # 获取用户的输入
 
